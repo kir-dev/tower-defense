@@ -1,3 +1,7 @@
 .custom-hidden {
 	display: none;
 }
+
+#playcanvas {
+	background-color: #006400;
+}
