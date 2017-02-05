@@ -1,7 +1,10 @@
 module.exports = function(io) {
 
   var config = require('../config.json');
+  var waveNum = 0;
   var player = [];
+  var enemy = [];
+
 
   io.on('connection', function(socket){
 
@@ -18,8 +21,37 @@ module.exports = function(io) {
       socket.broadcast.emit('New player: ' + username);
     });
 
+   // socket.on
+
     setInterval(function(){
-        socket.broadcast.emit('scoreboard', player);
+        io.emit('scoreboard', player);
+    }, 1000);
+
+    var sendEnemies = setInterval(function(){
+       // forEach(e in enemy){
+          //TODO enemy mozgatása
+        //  forEach(p in player){
+         //   forEach(t in p.tower){
+        //        var isInRange = e.x
+        //        if(){
+
+        //        }
+        //    }
+        //  }          
+       // }
+        io.emit('enemy', enemy);
+    }, 500);
+
+    //New enemy
+    var enemyTimer = setInterval(function(){
+        var newEnemy = {
+          created: Date.getTime(),
+          x: config.entry_point.x,
+          y: config.entry_point.y,
+          health: 100
+        };
+        enemy.push(newEnemy);
+        io.emit('newenemy', newEnemy)
     }, 1000);
 
   });

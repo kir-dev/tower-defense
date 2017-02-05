@@ -1,3 +1,10 @@
 {
-  "money": 500
+  "money": 500,
+  "entry_point": {
+  	"x": 0,
+  	"y": 0
+  },
+  
+  "speed" :10
+
 }
