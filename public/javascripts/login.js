@@ -13,6 +13,8 @@ $(document).ready(function () {
 	});
 
 	socket.on('newenemy', function (message) {
+		message.created = new Date(message.created);
+		console.log(message);
 		Game.addEnemy(message);
 	});
 });
