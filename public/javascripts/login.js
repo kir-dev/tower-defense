@@ -8,6 +8,7 @@ $(document).ready(function () {
 
 	socket.on('scoreboard', function(message) {
 		$('scoreboard').innerText = stringifyScoreboard(message);
+		console.log(message);
 	});
 });
 
@@ -21,6 +22,7 @@ function fadeInBoard() {
 function stringifyScoreboard(message) {
 	var scoreboardText = "";
 	message.forEach(function(user) {
-		scoreboardText.push(user.username + ": " + user.point + " pont, " + user.money + "$");
+		scoreboardText = scoreboardText + "\n" 
+		+ user.username + ": " + user.point + " pont, " + user.money + "$";
 	});
 }
