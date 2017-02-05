@@ -45,13 +45,14 @@ module.exports = function(io) {
     //New enemy
     var enemyTimer = setInterval(function(){
         var newEnemy = {
-          created: Date.getTime(),
+          created: new Date(),
           x: config.entry_point.x,
           y: config.entry_point.y,
           health: 100
         };
         enemy.push(newEnemy);
-        io.emit('newenemy', newEnemy)
+        console.log("New enemy sent");
+        io.emit('newenemy', newEnemy);
     }, 1000);
 
   });

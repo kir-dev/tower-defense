@@ -12,7 +12,7 @@ $(document).ready(function () {
 		console.log(stringifyScoreboard(message));
 	});
 
-	socket.on('addenemy', function (message) {
+	socket.on('newenemy', function (message) {
 		Game.addEnemy(message);
 	});
 });
