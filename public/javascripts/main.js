@@ -13,12 +13,10 @@ $(document).ready(function () {
     });
 
     socket.on('enemies', function (message) {
-        console.log(message);
         Display.setEnemies(message);
     });
 
     socket.on('map', function (message) {
-        console.log(message);
         Display.setTowers(message);
     });
 
@@ -32,8 +30,4 @@ function fadeInBoard() {
         $('#playarea').fadeIn(1000);
     });
     setInterval(Display.draw, 100);
-}
-
-function translate (coord) {
-    return (coord - 0.5) * 50 - 32;
 }

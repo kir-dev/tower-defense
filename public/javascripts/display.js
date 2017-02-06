@@ -4,10 +4,6 @@ var Display = (function() {
     var enemies = [];
     var towers = [];
     var imageCache = {};
-    
-    module.addEnemy = function (enemy) {
-        enemies.push(enemy);
-    }
 
     module.setEnemies = function (message) {
         enemies = message;
@@ -28,6 +24,10 @@ var Display = (function() {
         towers.forEach(function (tower) {
             context.drawImage(imageCache.doublerocket, translate(tower.x), translate(tower.y));
         });
+    }
+
+    function translate (coord) {
+        return (coord - 0.5) * 50 - 32;
     }
 
     function cacheImage(name, tileId) {
