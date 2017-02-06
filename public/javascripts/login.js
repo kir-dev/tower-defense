@@ -22,7 +22,6 @@ $(document).ready(function () {
 	});
 
 	socket.on('enemies', function (message) {
-		//message.created = new Date(message.created);
 		console.log(message);
 		Game.setEnemies(message);
 	});
