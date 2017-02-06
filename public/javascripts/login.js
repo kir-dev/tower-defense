@@ -31,6 +31,10 @@ $(document).ready(function () {
 		console.log(message);
 		Game.setTowers(message);
 	});
+
+	socket.on('message', function (message) {
+		$('alert-message').text(message);
+	})
 });
 
 function fadeInBoard() {
