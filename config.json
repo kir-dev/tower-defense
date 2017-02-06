@@ -1,10 +1,13 @@
 {
   "money": 500,
   "entry_point": {
-  	"x": 0,
-  	"y": 0
+  	"x": 0.5,
+  	"y": 5
   },
   
-  "speed" :10
+  "speed" :10,
+  "range" :1,
+  "damage" :1,
+  "towercost" :250
 
 }

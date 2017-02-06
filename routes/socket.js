@@ -4,6 +4,11 @@ module.exports = function(io) {
   var waveNum = 0;
   var player = [];
   var enemy = [];
+  var tower = [];
+
+  /*
+  tower: owner, x, y, range, damage, level
+  */
 
 
   io.on('connection', function(socket){
@@ -11,17 +16,56 @@ module.exports = function(io) {
     console.log('New user connected');
 
     socket.on('register', function(username){
+      socket.username = username;
       player.push({
         username: username,
         point: 0,
-        money: config.money,
-        tower: []
+        money: config.money
       });
       console.log('New player' + username);
       socket.broadcast.emit('New player: ' + username);
     });
 
-   // socket.on
+    socket.on('action', function(x, y){
+      var isNewTower = true;
+      for (var i = 0; i < player.length; i++) {
+        if(player[i].username==socket.username){
+          if(config.towercost < player[i].money){
+            forEach(t in tower){
+              if(t.x == x && t.y == y){
+                t.level += 1;
+                t.range += 1;
+                t.damage += 1;
+                console.log('Tower level up ' + username);
+                io.emit('message', "Nagyobb lett");
+                isNewTower = false;
+              }
+            }
+
+            if(isNewTower){
+              tower.push({
+                x: x,
+                y: y,
+                owner: socket.username,
+                range: config.range,
+                damage: config.damage,
+                level: 1
+              });
+              console.log('New tower ' + username);
+              io.emit('message', "Új tornyod van");
+            }
+            player[i].money -= config.towercost;
+          }
+          else{
+            io.emit('message', "Csoró vagy :(");
+          }
+          break;
+        }
+      }
+
+      io.emit('map', tower);
+    });
+
 
     setInterval(function(){
         io.emit('scoreboard', player);
@@ -39,7 +83,7 @@ module.exports = function(io) {
         //    }
         //  }          
        // }
-        io.emit('enemy', enemy);
+        io.emit('enemies', enemy);
     }, 500);
 
     //New enemy
