@@ -65,14 +65,17 @@ module.exports = function(io) {
 
       io.emit('map', tower);
     });
-
+    
+  });
 
     setInterval(function(){
         io.emit('scoreboard', player);
     }, 1000);
 
     var sendEnemies = setInterval(function(){
-       // forEach(e in enemy){
+      enemy.forEach(function(e){
+
+        e.x += 0.05;
           //TODO enemy mozgatása
         //  forEach(p in player){
          //   forEach(t in p.tower){
@@ -82,9 +85,9 @@ module.exports = function(io) {
         //        }
         //    }
         //  }          
-       // }
+        });
         io.emit('enemies', enemy);
-    }, 500);
+    }, 50);
 
     //New enemy
     var enemyTimer = setInterval(function(){
@@ -99,5 +102,4 @@ module.exports = function(io) {
         io.emit('newenemy', newEnemy);
     }, 1000);
 
-  });
 }
