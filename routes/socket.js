@@ -30,17 +30,17 @@ module.exports = function(io) {
       var isNewTower = true;
       for (var i = 0; i < player.length; i++) {
         if(player[i].username==socket.username){
-          if(config.towercost < player[i].money){
-            forEach(t in tower){
+          if(config.towercost <= player[i].money){
+             tower.forEach(function(t){
               if(t.x == x && t.y == y){
                 t.level += 1;
                 t.range += 1;
                 t.damage += 1;
-                console.log('Tower level up ' + username);
+                console.log('Tower level up ' + socket.username);
                 io.emit('message', "Nagyobb lett");
                 isNewTower = false;
               }
-            }
+            });
 
             if(isNewTower){
               tower.push({
@@ -51,7 +51,7 @@ module.exports = function(io) {
                 damage: config.damage,
                 level: 1
               });
-              console.log('New tower ' + username);
+              console.log('New tower ' + socket.username);
               io.emit('message', "Új tornyod van");
             }
             player[i].money -= config.towercost;
