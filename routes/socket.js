@@ -65,7 +65,7 @@ module.exports = function(io) {
 
       io.emit('map', tower);
     });
-    
+
   });
 
     setInterval(function(){
@@ -76,18 +76,30 @@ module.exports = function(io) {
       enemy.forEach(function(e){
 
         e.x += 0.05;
-          //TODO enemy mozgatása
-        //  forEach(p in player){
-         //   forEach(t in p.tower){
-        //        var isInRange = e.x
-        //        if(){
+        //TODO enemy mozgatása
 
-        //        }
-        //    }
-        //  }          
-        });
-        io.emit('enemies', enemy);
+      });
+      io.emit('enemies', enemy);
     }, 50);
+
+    setInterval(function() {
+      for (var i = 0; i < tower.length; i++){
+        enemy.forEach(function(e){
+          var isInRange = Math.sqrt( (e.x-tower[i].x)*(e.x-tower[i].x) + (e.y-tower[i].y)*(e.y-tower[i].y) ) < tower[i].range;
+          if(isInRange){
+            for (var j = 0; j < player.length; j++){
+              if(player[j].username==tower[i].owner){
+                player[j].money += tower[i].damage;
+                player[j].point += tower[i].damage;
+              }
+            }
+            e.health =- tower[i].damage;
+            io.emit('shoot', tower, e);
+            console.log("Enemy is in range");
+          }
+        });
+      }
+    }, 1000);
 
     //New enemy
     var enemyTimer = setInterval(function(){
