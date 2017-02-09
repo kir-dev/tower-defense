@@ -37,6 +37,7 @@ module.exports = function(io) {
       });
       console.log('New player' + username);
       socket.broadcast.emit('New player: ' + username);
+      io.emit('map', tower);
     });
 
     socket.on('action', function(x, y){

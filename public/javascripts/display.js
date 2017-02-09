@@ -24,6 +24,23 @@ var Display = (function() {
         var context = canvas.getContext('2d');
 
         context.clearRect(0, 0, canvas.width, canvas.height);
+        
+        context.beginPath();
+        // draw vertical lines
+        for (var x = 0; x <= canvas.width; x += 50) {
+            context.moveTo( 0.5 + x, 0 );
+            context.lineTo( 0.5 + x, canvas.height);
+        }
+
+        // draw horizontal lines
+        for (var y = 0; y <= canvas.height; y += 50) {
+            context.moveTo( 0.5, 0.5 + y);
+            context.lineTo( canvas.width, 0.5 + y);
+        }
+
+        context.strokeStyle = "grey";
+        context.stroke();
+
         enemies.forEach(function (enemy) {
             context.drawImage(imageCache.greenplane, translate(enemy.x), translate(enemy.y));
         });
