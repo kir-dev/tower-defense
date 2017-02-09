@@ -1,7 +1,7 @@
 var Input = (function () {
     var module = {};
 
-    module.initialize = function () {
+    module.initialize = function (socket) {
         var canvas = document.getElementById('playcanvas');
         canvas.addEventListener('click', function(event) {
             var x = event.pageX - canvas.offsetLeft,

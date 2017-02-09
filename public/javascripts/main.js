@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    Input.initialize();
     var socket = io();
+    Input.initialize(socket);
 
     $('#register-form').submit(function() {
         socket.emit('register', $('#username').val());
