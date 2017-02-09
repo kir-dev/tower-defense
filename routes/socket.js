@@ -94,9 +94,17 @@ module.exports = function(io) {
               }
             }
             e.health =- tower[i].damage;
-            io.emit('shoot', tower, e);
-            console.log("Enemy is in range");
+            if(e.health <= 0){
+              for (var i = enemy.length - 1; i >= 0; i--) {
+                if(enemy[i] = e){
+                  enemy.splice(i,1);
+                }
+              }
+            }
+            io.emit('shoot', {tower:tower,enemy:e});
+           // console.log("Enemy is in range");
           }
+          break;
         });
       }
     }, 1000);
