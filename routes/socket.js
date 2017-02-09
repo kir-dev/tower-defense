@@ -25,9 +25,9 @@ module.exports = function(io) {
             socket.emit('message', "Ne lopd más személyazonosságát!");
             socket.disconnect();
             console.log("User disconnected");
-            
+
             return;
-          }   
+          }
       }
       socket.username = username;
       player.push({
@@ -47,16 +47,21 @@ module.exports = function(io) {
           if(config.towercost <= player[i].money){
              tower.forEach(function(t){
               if(t.x == x && t.y == y){
-                t.level += 1;
-                t.range += 1;
-                t.damage += 1;
-                console.log('Tower level up ' + socket.username);
-                socket.emit('message', "Nagyobb lett");
+                if(t.owner == socket.username){
+
+                  player[i].money -= config.towercost;
+                  t.level += 1;
+                  t.range += 1;
+                  t.damage += 1;
+                  console.log('Tower level up ' + socket.username);
+                  socket.emit('message', "Nagyobb lett");
+                }
                 isNewTower = false;
               }
             });
 
             if(isNewTower){
+              player[i].money -= config.towercost;
               tower.push({
                 x: x,
                 y: y,
@@ -68,12 +73,11 @@ module.exports = function(io) {
               console.log('New tower ' + socket.username);
               socket.emit('message', "Új tornyod van");
             }
-            player[i].money -= config.towercost;
           }
           else{
             socket.emit('message', "Csóró vagy :(");
           }
-          
+
         }
       }
 
@@ -120,7 +124,7 @@ module.exports = function(io) {
                 return true;
            // console.log("Enemy is in range");
           }
-          
+
         });
       }
     }, 1000);
