@@ -21,7 +21,11 @@ $(document).ready(function () {
     });
 
     socket.on('message', function (message) {
-        $('alert-message').text(message);
+        $('#alert-message').text(message);
+    });
+
+    socket.on('shoot', function (message) {
+        Display.shoot(message);
     })
 });
 
@@ -29,5 +33,7 @@ function fadeInBoard() {
     $('#loginform').fadeOut(1000, function() {
         $('#playarea').fadeIn(1000);
     });
+    //Display.setTowers([{x:6, y:6}]);
+    //setInterval(function() {Display.shoot({enemy: {x: Math.random() * 10,y: Math.random() * 10}, tower:{x: 6, y: 6}})}, 800);
     setInterval(Display.draw, 100);
 }
