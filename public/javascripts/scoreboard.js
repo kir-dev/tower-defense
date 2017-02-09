@@ -4,8 +4,10 @@ var Scoreboard = (function () {
     module.update = function(message) {
         var scoreboardText = "";
         message.forEach(function(user) {
-            scoreboardText = scoreboardText + "\n" 
-            + user.username + ": " + user.point + " pont, " + user.money + "$";
+            scoreboardText = scoreboardText + "<tr><td><b>"
+            + user.username + "</b></td><td>"
+             + user.point + " pont</td><td> "
+             + user.money + " $ </td></tr>";
         });
         return scoreboardText;
     }

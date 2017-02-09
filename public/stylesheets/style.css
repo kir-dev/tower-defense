@@ -1,7 +1,32 @@
 .custom-hidden {
 	display: none;
+	text-align: center;
 }
 
 #playcanvas {
 	background-color: #006400;
+	margin-top: 50px;
+}
+
+.well{
+	width: 500px;
+	margin: 0 auto;
+}
+
+.well table{
+	width: 100%;
+}
+.scoreboard{
+	width: 100%;
+}
+
+#alert-message{
+	width: 500px;
+	margin: 0 auto;
+	z-index: 2;
+	position: fixed;
+	left: 50%;
+	margin-left: -250px;
+	border-radius: 0;
+	display: none;
 }

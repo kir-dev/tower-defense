@@ -9,7 +9,7 @@ $(document).ready(function () {
     });
 
     socket.on('scoreboard', function (message) {
-        $('#scoreboard').text(Scoreboard.update(message));
+        $('#scoreboard').html(Scoreboard.update(message));
     });
 
     socket.on('enemies', function (message) {
@@ -22,6 +22,9 @@ $(document).ready(function () {
 
     socket.on('message', function (message) {
         $('#alert-message').text(message);
+        $('#alert-message').show(function() {
+            $('#alert-message').fadeOut(3000);
+        });
     });
 
     socket.on('shoot', function (message) {
