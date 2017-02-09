@@ -22,11 +22,11 @@ module.exports = function(io) {
     socket.on('register', function(username){
       for (var i = player.length - 1; i >= 0; i--) {
           if(player[i].username === username){
-            io.emit('message', "Ne lopd más személyazonosságát!");
+            socket.emit('message', "Ne lopd más személyazonosságát!");
             socket.disconnect();
             console.log("User disconnected");
             
-            
+            return;
           }   
       }
       socket.username = username;
@@ -50,7 +50,7 @@ module.exports = function(io) {
                 t.range += 1;
                 t.damage += 1;
                 console.log('Tower level up ' + socket.username);
-                io.emit('message', "Nagyobb lett");
+                socket.emit('message', "Nagyobb lett");
                 isNewTower = false;
               }
             });
@@ -65,18 +65,18 @@ module.exports = function(io) {
                 level: 1
               });
               console.log('New tower ' + socket.username);
-              io.emit('message', "Új tornyod van");
+              socket.emit('message', "Új tornyod van");
             }
             player[i].money -= config.towercost;
           }
           else{
-            io.emit('message', "Csóró vagy :(");
+            socket.emit('message', "Csóró vagy :(");
           }
           
         }
       }
 
-      socket.broadcast.emit('map', tower);
+      io.emit('map', tower);
     });
 
   });
@@ -97,7 +97,7 @@ module.exports = function(io) {
 
     setInterval(function() {
       for (var i = 0; i < tower.length; i++){
-        enemy.forEach(function(e){
+        enemy.some(function(e){
           var isInRange = Math.sqrt( (e.x-tower[i].x)*(e.x-tower[i].x) + (e.y-tower[i].y)*(e.y-tower[i].y) ) < tower[i].range;
           if(isInRange){
             for (var j = 0; j < player.length; j++){
@@ -115,8 +115,8 @@ module.exports = function(io) {
                 }
               }
             }
-            io.emit('shoot', {tower:tower,enemy:e}) ;
-                return;
+            io.emit('shoot', {tower:tower[i],enemy:e}) ;
+                return true;
            // console.log("Enemy is in range");
           }
           

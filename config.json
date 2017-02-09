@@ -6,7 +6,7 @@
   },
 
   "speed" :10,
-  "range" :1,
+  "range" :3,
   "damage" :1,
   "rateoffire": 1,
   "towercost" :250,
