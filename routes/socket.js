@@ -15,7 +15,17 @@ module.exports = function(io) {
 
     console.log('New user connected');
 
+
     socket.on('register', function(username){
+      for (var i = player.length - 1; i >= 0; i--) {
+          if(player[i].username === username){
+            io.emit('message', "Ne lopd más személyazonosságát!");
+            socket.disconnect();
+            console.log("User disconnected");
+            
+            
+          }   
+      }
       socket.username = username;
       player.push({
         username: username,
@@ -57,13 +67,13 @@ module.exports = function(io) {
             player[i].money -= config.towercost;
           }
           else{
-            io.emit('message', "Csoró vagy :(");
+            io.emit('message', "Csóró vagy :(");
           }
-          break;
+          
         }
       }
 
-      io.emit('map', tower);
+      socket.broadcast.emit('map', tower);
     });
 
   });
@@ -93,18 +103,20 @@ module.exports = function(io) {
                 player[j].point += tower[i].damage;
               }
             }
-            e.health =- tower[i].damage;
+            e.health -= tower[i].damage;
             if(e.health <= 0){
-              for (var i = enemy.length - 1; i >= 0; i--) {
-                if(enemy[i] = e){
-                  enemy.splice(i,1);
+              for (var k = enemy.length - 1; k >= 0; k--) {
+                if(enemy[k] === e){
+                  enemy.splice(k,1);
+                  break;
                 }
               }
             }
-            io.emit('shoot', {tower:tower,enemy:e});
+            io.emit('shoot', {tower:tower,enemy:e}) ;
+                return;
            // console.log("Enemy is in range");
           }
-          break;
+          
         });
       }
     }, 1000);
