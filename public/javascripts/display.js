@@ -42,7 +42,7 @@ var Display = (function() {
         context.stroke();
 
         enemies.forEach(function (enemy) {
-            context.drawImage(imageCache.greenplane, translate(enemy.x), translate(enemy.y));
+            context.drawImage(imageCache.greenplane, translateImage(enemy.x), translateImage(enemy.y));
         });
         towers.forEach(function (tower) {
             if(tower.target) {
@@ -61,6 +61,10 @@ var Display = (function() {
     }
 
     function translate (coord) {
+        return (coord - 0.5) * 50;
+    }
+
+    function translateImage (coord) {
         return (coord - 0.5) * 50 - 32;
     }
 
