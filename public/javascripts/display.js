@@ -22,9 +22,10 @@ var Display = (function() {
     module.draw = function () {
         var canvas = document.getElementById('playcanvas');
         var context = canvas.getContext('2d');
+        var username = $('#username').val();
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        
+
         context.beginPath();
         // draw vertical lines
         for (var x = 0; x <= canvas.width; x += 50) {
@@ -48,7 +49,7 @@ var Display = (function() {
             if(tower.target) {
                 tower.angle = Math.atan2(tower.y - tower.target.y, tower.x - tower.target.x) - Math.PI / 2;
             }
-            rotateAndPaintImage(context, imageCache.doublerocket, tower.angle, translate(tower.x), translate(tower.y), 32, 32);
+            rotateAndPaintImage(context, tower.owner == username ? imageCache.doublerocketOwn:imageCache.doublerocket, tower.angle, translate(tower.x), translate(tower.y), 32, 32);
         });
         shots.forEach(function (shot) {
             context.beginPath();
@@ -96,6 +97,7 @@ var Display = (function() {
 
     cacheImage('greenplane', 270);
     cacheImage('doublerocket', 206);
+    cacheImage('doublerocketOwn','206_own')
 
     return module;
 })();
