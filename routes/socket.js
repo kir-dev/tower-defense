@@ -1,10 +1,13 @@
 module.exports = function(io) {
 
   var config = require('../config.json');
-  var waveNum = 0;
+  var roundNum = 0;
+  var difficulty = 1;
   var player = [];
   var enemy = [];
   var tower = [];
+  var wait = 0;
+  var enemiesPushed = 0;
 
   /*
   tower: owner, x, y, range, damage, level
@@ -103,15 +106,31 @@ module.exports = function(io) {
 
     //New enemy
     var enemyTimer = setInterval(function(){
-        var newEnemy = {
-          created: new Date(),
-          x: config.entry_point.x,
-          y: config.entry_point.y,
-          health: 100
-        };
-        enemy.push(newEnemy);
-        console.log("New enemy sent");
-        io.emit('newenemy', newEnemy);
+        if(player.length > 0){
+          roundNum++;
+          if(roundNum % 10 == 0){
+            difficulty++;
+          }
+          if(wait == 0){
+
+            var newEnemy = {
+              created: new Date(),
+              x: config.entry_point.x,
+              y: config.entry_point.y,
+              health: 100 + difficulty
+            };
+            enemy.push(newEnemy);
+            enemiesPushed ++;
+            io.emit('newenemy', newEnemy);
+            if(enemiesPushed == (difficulty*player.length)){
+              enemiesPushed = 0;
+              wait+= config.waitTime;
+            }
+          }else{
+            wait--;
+          }
+        }
+
     }, 1000);
 
 }

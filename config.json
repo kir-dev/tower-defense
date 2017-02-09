@@ -4,11 +4,12 @@
   	"x": 0.5,
   	"y": 5
   },
-  
+
   "speed" :10,
   "range" :1,
   "damage" :1,
   "rateoffire": 1,
-  "towercost" :250
+  "towercost" :250,
+  "waitTime": 10
 
 }
