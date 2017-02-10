@@ -1,7 +1,10 @@
+var pather = require('../modules/pather');
+
 module.exports = function(io) {
 
   var config = require('../config.json');
  // var display = require('../public/javascripts/display.js');
+  pather.initialize(config.enemyPath);
   var roundNum = 0;
   var difficulty = 1;
   var player = [];
@@ -95,7 +98,10 @@ module.exports = function(io) {
     var sendEnemies = setInterval(function(){
       enemy.forEach(function(e){
 
-        e.x += 0.05;
+        e.age += 0.05;
+        var position = pather.calculatePosition(e.age);
+        e.x = position.x;
+        e.y = position.y;
         //A magic konstans a canvas mérete az index.html fájlból (500), 
         //a display.js translate függvényének inverze alkalmazása után => 10.5
         //Ha van valami szebb módja, hogy a node hogyan tudja DOM-ból, vagy valahonnan elkérni
@@ -150,6 +156,7 @@ module.exports = function(io) {
 
             var newEnemy = {
               created: new Date(),
+              age: 0,
               x: config.entry_point.x,
               y: config.entry_point.y,
               health: 100 + difficulty

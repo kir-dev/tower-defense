@@ -1,0 +1,35 @@
+
+// Path format is: [{x: , y: }, {x: , y: }, ...]
+exports.initialize = function (path) {
+    for(var i = 0; i < path.length - 1; i++) {
+        if(i == 0) {
+            path[i].start = 0;
+        } else {
+            path[i].start = path[i - 1].start + 
+                Math.abs(path[i - 1].x - path[i].x) + 
+                Math.abs(path[i - 1].y - path[i].y);
+        }
+        path[i].length = distanceBetween(path[i].x, path[i].y, path[i + 1].x, path[i + 1].y);
+    }
+    this.path = path;
+}
+
+// Gets the current position {x: , y: } of the enemy from the distance
+// travelled from the entry point
+exports.calculatePosition = function (distance) {
+    for(var i = this.path.length - 2; i >= 0; i--) {
+        if(distance >= this.path[i].start) {
+            var scaledDistance = (distance - this.path[i].start) / this.path[i].length;
+            return lerp(this.path[i].x, this.path[i].y, this.path[i + 1].x, this.path[i + 1].y, scaledDistance);
+        }
+    }
+}
+
+// Linear interpolation
+function lerp(x1, y1, x2, y2, value) {
+    return {x: (x1 + value * (x2 - x1)), y: (y1 + value * (y2 - y1))};
+}
+
+function distanceBetween(x1, y1, x2, y2) {
+    return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
