@@ -7,9 +7,10 @@
 
   "speed" :10,
   "range" :3,
-  "damage" :1,
+  "damage" :50,
   "rateoffire": 1,
   "towercost" :250,
-  "waitTime": 10
+  "waitTime": 10,
+  "lives": 3
 
 }

@@ -1,6 +1,7 @@
 module.exports = function(io) {
 
   var config = require('../config.json');
+ // var display = require('../public/javascripts/display.js');
   var roundNum = 0;
   var difficulty = 1;
   var player = [];
@@ -8,6 +9,7 @@ module.exports = function(io) {
   var tower = [];
   var wait = 0;
   var enemiesPushed = 0;
+  var lives = config.lives;
 
   /*
   tower: owner, x, y, range, damage, level
@@ -94,7 +96,20 @@ module.exports = function(io) {
       enemy.forEach(function(e){
 
         e.x += 0.05;
-        //TODO enemy mozgatása
+        //A magic konstans a canvas mérete az index.html fájlból (500), 
+        //a display.js translate függvényének inverze alkalmazása után => 10.5
+        //Ha van valami szebb módja, hogy a node hogyan tudja DOM-ból, vagy valahonnan elkérni
+        //akkor szóljatok
+        if(e.x >= 10.5){
+          removeEnemy(e);
+           lives--;
+           io.emit('message', "Vesztettetek egy életet :( Hátralévő életek száma:" + lives);
+           if(lives <=0){
+            //Ez valszeg lehetne egy külön esemény is
+            io.emit('message', "Game over :(");
+           }
+       }
+        
 
       });
       io.emit('enemies', enemy);
@@ -113,12 +128,7 @@ module.exports = function(io) {
             }
             e.health -= tower[i].damage;
             if(e.health <= 0){
-              for (var k = enemy.length - 1; k >= 0; k--) {
-                if(enemy[k] === e){
-                  enemy.splice(k,1);
-                  break;
-                }
-              }
+              removeEnemy(e);
             }
             io.emit('shoot', {tower:tower[i],enemy:e}) ;
                 return true;
@@ -157,5 +167,14 @@ module.exports = function(io) {
         }
 
     }, 1000);
+
+    function removeEnemy(e){
+        for (var k = enemy.length - 1; k >= 0; k--) {
+                if(enemy[k] === e){
+                  enemy.splice(k,1);
+                  return;
+                }
+              }
+    }
 
 }
