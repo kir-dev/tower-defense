@@ -42,15 +42,22 @@ var Display = (function() {
         context.strokeStyle = "grey";
         context.stroke();
 
-        enemies.forEach(function (enemy) {
-            context.drawImage(imageCache.greenplane, translateImage(enemy.x), translateImage(enemy.y));
-        });
+        // draw towers
         towers.forEach(function (tower) {
             if(tower.target) {
                 tower.angle = Math.atan2(tower.y - tower.target.y, tower.x - tower.target.x) - Math.PI / 2;
             }
-            rotateAndPaintImage(context, tower.owner == username ? imageCache.doublerocketOwn:imageCache.doublerocket, tower.angle, translate(tower.x), translate(tower.y), 32, 32);
+            var imageName = 'rocket' + (tower.level<4 ? tower.level : '4');
+            
+            rotateAndPaintImage(context, imageCache[ (tower.owner == username ? imageName : imageName + 'Own')], tower.angle, translate(tower.x), translate(tower.y), 32, 32);
         });
+
+        // draw enemies
+        enemies.forEach(function (enemy) {
+            context.drawImage(imageCache.greenplane, translateImage(enemy.x), translateImage(enemy.y));
+        });
+
+        // draw shots
         shots.forEach(function (shot) {
             context.beginPath();
             context.moveTo(translate(shot.tower.x), translate(shot.tower.y));
@@ -96,8 +103,14 @@ var Display = (function() {
     }
 
     cacheImage('greenplane', 270);
-    cacheImage('doublerocket', 206);
-    cacheImage('doublerocketOwn','206_own')
+    cacheImage('rocket1', 206);
+    cacheImage('rocket1Own','206_own');
+    cacheImage('rocket2', 205);
+    cacheImage('rocket2Own','205_own');
+    cacheImage('rocket3', 249);
+    cacheImage('rocket3Own','249_own');
+    cacheImage('rocket4', 250);
+    cacheImage('rocket4Own','250_own');
 
     return module;
 })();
