@@ -20,7 +20,9 @@ exports.calculatePosition = function (distance) {
     for(var i = this.path.length - 2; i >= 0; i--) {
         if(distance >= this.path[i].start) {
             var scaledDistance = (distance - this.path[i].start) / this.path[i].length;
-            return lerp(this.path[i].x, this.path[i].y, this.path[i + 1].x, this.path[i + 1].y, scaledDistance);
+            var position = lerp(this.path[i].x, this.path[i].y, this.path[i + 1].x, this.path[i + 1].y, scaledDistance);
+            position.facing = getFacing(this.path[i].x, this.path[i].y, this.path[i + 1].x, this.path[i + 1].y);
+            return position;
         }
     }
 }
@@ -34,6 +36,18 @@ exports.getPathTiles = function () {
         }
     }
     return tiles;
+}
+
+function getFacing(x1, y1, x2, y2) {
+    if(x1 < x2) {
+        return "right";
+    } else if(x2 < x1) {
+        return "left";
+    } else if(y1 < y2) {
+        return "down";
+    } else if(y2 < y1) {
+        return "up";
+    }
 }
 
 // Linear interpolation

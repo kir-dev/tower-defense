@@ -103,6 +103,7 @@ module.exports = function(io) {
         var position = pather.calculatePosition(e.age);
         e.x = position.x;
         e.y = position.y;
+        e.facing = position.facing;
         //A magic konstans a canvas mérete az index.html fájlból (500), 
         //a display.js translate függvényének inverze alkalmazása után => 10.5
         //Ha van valami szebb módja, hogy a node hogyan tudja DOM-ból, vagy valahonnan elkérni

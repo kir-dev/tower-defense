@@ -54,7 +54,7 @@ var Display = (function() {
 
         // draw enemies
         enemies.forEach(function (enemy) {
-            context.drawImage(imageCache.greenplane, translateImage(enemy.x), translateImage(enemy.y));
+            rotateAndPaintImage(context, imageCache.greenplane, facingToAngle(enemy.facing), translate(enemy.x), translate(enemy.y), 32, 32);
         });
         towers.forEach(function (tower) {
             if(tower.target) {
@@ -90,6 +90,18 @@ var Display = (function() {
             }
         });
         return ret;
+    }
+
+    function facingToAngle(facing) {
+        if(facing == "right") {
+            return 0;
+        } else if(facing == "left") {
+            return Math.PI;
+        } else if(facing == "down") {
+            return Math.PI / 2;
+        } else if(facing == "up") {
+            return 3 * Math.PI / 2;
+        }
     }
 
     function rotateAndPaintImage (context, image, angleInRad , positionX, positionY, axisX, axisY) {
