@@ -22,7 +22,7 @@ var Display = (function() {
     module.draw = function () {
         var canvas = document.getElementById('playcanvas');
         var context = canvas.getContext('2d');
-        var username = $('#username').val();
+        var username = localStorage.getItem("username");
 
         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -48,7 +48,7 @@ var Display = (function() {
                 tower.angle = Math.atan2(tower.y - tower.target.y, tower.x - tower.target.x) - Math.PI / 2;
             }
             var imageName = 'rocket' + (tower.level<4 ? tower.level : '4');
-            
+
             rotateAndPaintImage(context, imageCache[ (tower.owner == username ? imageName : imageName + 'Own')], tower.angle, translate(tower.x), translate(tower.y), 32, 32);
         });
 

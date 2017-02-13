@@ -14,6 +14,17 @@ module.exports = function(io) {
   var enemiesPushed = 0;
   var lives = config.lives;
 
+  function initializeGame(){
+    roundNum = 0;
+    difficulty = 1;
+    player = [];
+    enemy = [];
+    tower = [];
+    wait = 0;
+    enemiesPushed = 0;
+    lives = config.lives;
+    console.log("Game initialized")
+  }
   /*
   tower: owner, x, y, range, damage, level
   */
@@ -28,9 +39,7 @@ module.exports = function(io) {
       for (var i = player.length - 1; i >= 0; i--) {
           if(player[i].username === username){
             socket.emit('message', "Ne lopd más személyazonosságát!");
-            socket.disconnect();
-            console.log("User disconnected");
-
+            socket.emit("unauthorized")
             return;
           }
       }
@@ -43,6 +52,41 @@ module.exports = function(io) {
       console.log('New player' + username);
       socket.broadcast.emit('New player: ' + username);
       io.emit('map', tower);
+    });
+
+    socket.on('login', function(username) {
+      for (var i = player.length - 1; i >= 0; i--) {
+          if(player[i].username == username){
+            socket.username = username;
+            socket.broadcast.emit('Player logged in' + username);
+            io.emit('map', tower);
+            console.log("user found")
+            return;
+          }
+      }
+      console.log("user not found")
+      socket.emit('unauthorized');
+    });
+
+    socket.on('logout', function(username) {
+      for (var i = player.length - 1; i >= 0; i--) {
+          if(player[i].username == username){
+            tower.slice().reverse().forEach(function(item, index, object) {
+              if (item.owner === username) {
+                tower.splice(object.length - 1 - index, 1);
+              }
+            });
+            player.splice(i,1);
+            io.emit('map', tower);
+            socket.emit('loggedOut');
+            if(player.length == 0){
+              initializeGame();
+            }
+            return;
+          }
+      }
+      socket.emit('message', "Nincs ilyen felhasználó");
+      socket.disconnect();
     });
 
     socket.on('action', function(x, y){
@@ -102,7 +146,7 @@ module.exports = function(io) {
         var position = pather.calculatePosition(e.age);
         e.x = position.x;
         e.y = position.y;
-        //A magic konstans a canvas mérete az index.html fájlból (500), 
+        //A magic konstans a canvas mérete az index.html fájlból (500),
         //a display.js translate függvényének inverze alkalmazása után => 10.5
         //Ha van valami szebb módja, hogy a node hogyan tudja DOM-ból, vagy valahonnan elkérni
         //akkor szóljatok
@@ -115,7 +159,7 @@ module.exports = function(io) {
             io.emit('message', "Game over :(");
            }
        }
-        
+
 
       });
       io.emit('enemies', enemy);
@@ -128,8 +172,8 @@ module.exports = function(io) {
           if(isInRange){
             for (var j = 0; j < player.length; j++){
               if(player[j].username==tower[i].owner){
-                player[j].money += tower[i].damage;
-                player[j].point += tower[i].damage;
+                player[j].money += Math.floor(tower[i].damage/5);
+                player[j].point += Math.floor(tower[i].damage/5);
               }
             }
             e.health -= tower[i].damage;
@@ -159,7 +203,7 @@ module.exports = function(io) {
               age: 0,
               x: config.entry_point.x,
               y: config.entry_point.y,
-              health: 100 + difficulty
+              health: 100 + 10*difficulty
             };
             enemy.push(newEnemy);
             enemiesPushed ++;
