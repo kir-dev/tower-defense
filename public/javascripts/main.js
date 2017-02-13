@@ -20,6 +20,10 @@ $(document).ready(function () {
         Display.setTowers(message);
     });
 
+    socket.on('path', function (message) {
+        Display.setPath(message);
+    });
+
     socket.on('message', function (message) {
         $('#alert-message').text(message);
         $('#alert-message').show(function() {

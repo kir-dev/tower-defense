@@ -25,9 +25,20 @@ exports.calculatePosition = function (distance) {
     }
 }
 
+// Returns each road-tile in the format of: [{x:, y: }, {x: , y: }, ...]
+exports.getPathTiles = function () {
+    var tiles = [];
+    for(var i = 0; i < this.path.length - 1; i++) {
+        for(var j = 0; j <= this.path[i].length; j++) {
+            tiles.push(lerp(this.path[i].x, this.path[i].y, this.path[i + 1].x, this.path[i + 1].y, j / this.path[i].length));
+        }
+    }
+    return tiles;
+}
+
 // Linear interpolation
-function lerp(x1, y1, x2, y2, value) {
-    return {x: (x1 + value * (x2 - x1)), y: (y1 + value * (y2 - y1))};
+function lerp(x1, y1, x2, y2, t) {
+    return {x: (x1 + t * (x2 - x1)), y: (y1 + t * (y2 - y1))};
 }
 
 function distanceBetween(x1, y1, x2, y2) {
