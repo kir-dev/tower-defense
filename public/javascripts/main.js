@@ -41,6 +41,10 @@ $(document).ready(function () {
         $('#scoreboard').html(Scoreboard.update(message));
     });
 
+    socket.on('lives', function (message) {
+         $('#lives').width(message + "%");
+     });
+
     socket.on('enemies', function (message) {
         Display.setEnemies(message);
     });

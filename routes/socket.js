@@ -156,6 +156,7 @@ module.exports = function(io) {
           removeEnemy(e);
            lives--;
            io.emit('message', "Vesztettetek egy életet :( Hátralévő életek száma:" + lives);
+           io.emit('lives', (lives/config.lives)*100);
            if(lives <=0){
             //Ez valszeg lehetne egy külön esemény is
             io.emit('message', "Game over :(");

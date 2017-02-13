@@ -30,3 +30,15 @@
 	border-radius: 0;
 	display: none;
 }
+
+#hp{
+	width: 500px;
+	background: #ff6565;
+	height: 8px;
+	margin: 0 auto;
+}
+#lives{
+	width: 100%;
+	background: green;
+	height: 8px;
+}
