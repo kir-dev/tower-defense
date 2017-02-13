@@ -4,7 +4,7 @@ module.exports = function(io) {
 
   var config = require('../config.json');
  // var display = require('../public/javascripts/display.js');
-  pather.initialize(config.enemyPath);
+  pather.initialize(config.enemyPathChoices[decideMap()]);
   var roundNum = 0;
   var difficulty = 1;
   var player = [];
@@ -184,6 +184,14 @@ module.exports = function(io) {
                   return;
                 }
               }
+    }
+
+    function decideMap() {
+      if(process.env.MAP) {
+        return process.env.MAP;
+      } else {
+        return Math.floor(Math.random() * config.enemyPathChoices.length);
+      }
     }
 
 }
