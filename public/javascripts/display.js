@@ -5,6 +5,7 @@ var Display = (function() {
     var towers = [];
     var imageCache = {};
     var shots = [];
+    var path = [];
 
     module.setEnemies = function (message) {
         enemies = message;
@@ -12,6 +13,10 @@ var Display = (function() {
 
     module.setTowers = function (message) {
         towers = message;
+    }
+
+    module.setPath = function (message) {
+        path = message;
     }
 
     module.shoot = function (message) {
@@ -28,13 +33,13 @@ var Display = (function() {
 
         context.beginPath();
         // draw vertical lines
-        for (var x = 0; x <= canvas.width; x += 50) {
+        for (var x = 0; x <= canvas.width; x += 64) {
             context.moveTo( 0.5 + x, 0 );
             context.lineTo( 0.5 + x, canvas.height);
         }
 
         // draw horizontal lines
-        for (var y = 0; y <= canvas.height; y += 50) {
+        for (var y = 0; y <= canvas.height; y += 64) {
             context.moveTo( 0.5, 0.5 + y);
             context.lineTo( canvas.width, 0.5 + y);
         }
@@ -42,7 +47,15 @@ var Display = (function() {
         context.strokeStyle = "grey";
         context.stroke();
 
-        // draw towers
+
+        path.forEach(function (pathElement) {
+            context.drawImage(imageCache.ground, translateImage(pathElement.x), translateImage(pathElement.y));
+        })
+
+        // draw enemies
+        enemies.forEach(function (enemy) {
+            rotateAndPaintImage(context, imageCache.greenplane, facingToAngle(enemy.facing), translate(enemy.x), translate(enemy.y), 32, 32);
+        });
         towers.forEach(function (tower) {
             if(tower.target) {
                 tower.angle = Math.atan2(tower.y - tower.target.y, tower.x - tower.target.x) - Math.PI / 2;
@@ -51,13 +64,6 @@ var Display = (function() {
 
             rotateAndPaintImage(context, imageCache[ (tower.owner == username ? imageName : imageName + 'Own')], tower.angle, translate(tower.x), translate(tower.y), 32, 32);
         });
-
-        // draw enemies
-        enemies.forEach(function (enemy) {
-            context.drawImage(imageCache.greenplane, translateImage(enemy.x), translateImage(enemy.y));
-        });
-
-        // draw shots
         shots.forEach(function (shot) {
             context.beginPath();
             context.moveTo(translate(shot.tower.x), translate(shot.tower.y));
@@ -69,11 +75,11 @@ var Display = (function() {
     }
 
     function translate (coord) {
-        return (coord - 0.5) * 50;
+        return (coord - 0.5) * 64;
     }
 
     function translateImage (coord) {
-        return (coord - 0.5) * 50 - 32;
+        return (coord - 0.5) * 64 - 32;
     }
 
     function getTowerAt(x, y) {
@@ -84,6 +90,18 @@ var Display = (function() {
             }
         });
         return ret;
+    }
+
+    function facingToAngle(facing) {
+        if(facing == "right") {
+            return 0;
+        } else if(facing == "left") {
+            return Math.PI;
+        } else if(facing == "down") {
+            return Math.PI / 2;
+        } else if(facing == "up") {
+            return 3 * Math.PI / 2;
+        }
     }
 
     function rotateAndPaintImage (context, image, angleInRad , positionX, positionY, axisX, axisY) {
@@ -111,6 +129,7 @@ var Display = (function() {
     cacheImage('rocket3Own','249_own');
     cacheImage('rocket4', 250);
     cacheImage('rocket4Own','250_own');
+    cacheImage('ground', '055');
 
     return module;
 })();

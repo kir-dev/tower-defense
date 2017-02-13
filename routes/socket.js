@@ -4,7 +4,7 @@ module.exports = function(io) {
 
   var config = require('../config.json');
  // var display = require('../public/javascripts/display.js');
-  pather.initialize(config.enemyPath);
+  pather.initialize(config.enemyPathChoices[decideMap()]);
   var roundNum = 0;
   var difficulty = 1;
   var player = [];
@@ -52,6 +52,7 @@ module.exports = function(io) {
       console.log('New player' + username);
       socket.broadcast.emit('New player: ' + username);
       io.emit('map', tower);
+      socket.emit('path', pather.getPathTiles());
     });
 
     socket.on('login', function(username) {
@@ -146,6 +147,7 @@ module.exports = function(io) {
         var position = pather.calculatePosition(e.age);
         e.x = position.x;
         e.y = position.y;
+        e.facing = position.facing;
         //A magic konstans a canvas mérete az index.html fájlból (500),
         //a display.js translate függvényének inverze alkalmazása után => 10.5
         //Ha van valami szebb módja, hogy a node hogyan tudja DOM-ból, vagy valahonnan elkérni
@@ -226,6 +228,14 @@ module.exports = function(io) {
                   return;
                 }
               }
+    }
+
+    function decideMap() {
+      if(process.env.MAP) {
+        return process.env.MAP;
+      } else {
+        return Math.floor(Math.random() * config.enemyPathChoices.length);
+      }
     }
 
 }

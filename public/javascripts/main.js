@@ -50,6 +50,10 @@ $(document).ready(function () {
         fadeInBoard();
     });
 
+    socket.on('path', function (message) {
+        Display.setPath(message);
+    });
+
     socket.on('message', function (message) {
         $('#alert-message').text(message);
         $('#alert-message').show(function() {

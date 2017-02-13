@@ -11,7 +11,7 @@ var Input = (function () {
     }
 
     function decideClick (coord) {
-        var worldCoord = coord / 50 + 0.5;
+        var worldCoord = coord / 64 + 0.5;
         return Math.round(worldCoord);
     }
 
